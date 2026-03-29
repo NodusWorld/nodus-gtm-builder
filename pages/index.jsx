@@ -83,26 +83,16 @@ function parseSections(text) {
 
 // ── Claude API call ──
 async function callClaude(system, user) {
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
+  const res = await fetch("/api/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1200,
-      system,
-      messages: [{ role: "user", content: user }],
-    }),
+    body: JSON.stringify({ system, prompt: user }),
   });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`API ${res.status}: ${err}`);
-  }
+  if (!res.ok) throw new Error(`API error ${res.status}`);
   const data = await res.json();
-  const text = data?.content?.[0]?.text;
-  if (!text) throw new Error("Empty response from API");
-  return text;
+  if (!data.result) throw new Error("Empty response");
+  return data.result;
 }
-
 // ── Sub-components ──
 
 function OutputCard({ title, body, accent, delay = 0 }) {
