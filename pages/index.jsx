@@ -283,6 +283,10 @@ Define 3 signals that should trigger an expansion conversation. For each: the id
           companyStage: ctx.stage,
           market: ctx.market,
           acv: ctx.deal,
+          positioning: outputs["positioning"] || "",
+          demand: outputs["demand"] || "",
+          sales: outputs["sales"] || "",
+          onboarding: outputs["onboarding"] || "",
         })
       });
     } catch(e) {
